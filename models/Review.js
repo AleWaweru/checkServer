@@ -9,12 +9,12 @@ const reviewSchema = new mongoose.Schema(
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // or "Account" depending on your schema
+      ref: "User", 
       required: true,
     },
     ratings: {
       type: Map,
-      of: Number, // key = manifesto title, value = 1 to 4
+      of: Number, 
       required: true,
     },
   },
