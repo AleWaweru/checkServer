@@ -4,7 +4,16 @@ import User from "../models/User.js";
 
 // Register
 export const register = async (req, res) => {
-  const { firstName, lastName, email, password, county, constituency, ward } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    county,
+    constituency,
+    ward,
+    role = 'user',
+  } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -20,6 +29,7 @@ export const register = async (req, res) => {
       county,
       constituency,
       ward,
+      role,
     });
 
     res.status(201).json({ message: "User registered", user: newUser });
@@ -27,6 +37,7 @@ export const register = async (req, res) => {
     res.status(500).json({ message: "Something went wrong", error: err.message });
   }
 };
+
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -38,20 +49,18 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    // Generate JWT token
     const token = jwt.sign(
       {
         id: user._id,
+        role: user.role,
       },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // Save token to database
     user.token = token;
     await user.save();
 
-    // Respond with user and token
     res.status(200).json({
       message: "Login successful",
       user,
@@ -61,5 +70,6 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Login failed", error: err.message });
   }
 };
+
 
 

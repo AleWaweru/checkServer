@@ -7,7 +7,6 @@ export const createLeader = async (req, res) => {
   const { name, position, level, manifesto, county, constituency, ward } = req.body;
 
   try {
-    // Build the query dynamically based on level
     const query = {
       name,
       position,
@@ -47,14 +46,20 @@ export const getLeaders = async (req, res) => {
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const leaders = await Leader.find({
-      $or: [
-        { position: "president" },
-        { county: user.county, level: "county" },
-        { constituency: user.constituency, level: "constituency" },
-        { ward: user.ward, level: "ward" },
-      ],
-    });
+    let leaders;
+
+    if (user.role === "admin") {
+      leaders = await Leader.find();
+    } else {
+      leaders = await Leader.find({
+        $or: [
+          { position: "president" },
+          { county: user.county, level: "county" },
+          { constituency: user.constituency, level: "constituency" },
+          { ward: user.ward, level: "ward" },
+        ],
+      });
+    }
 
     res.status(200).json(leaders);
   } catch (err) {

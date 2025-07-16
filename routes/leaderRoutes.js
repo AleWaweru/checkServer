@@ -1,6 +1,7 @@
 import express from "express";
-import { createLeader, getGlobalLeaderPerformance, getLeaderById, getLeaders } from "../controllers/leaderController.js";
+import { createLeader, getGlobalLeaderPerformance, getLeaderById, getLeaders, updateLeader } from "../controllers/leaderController.js";
 import { verifyToken } from "../middleware/jwt/verifyToken.js";
+import { isAdmin } from "../middleware/roles/adminRoles.js";
 
 
 
@@ -13,6 +14,8 @@ router.get("/performance", getGlobalLeaderPerformance);
 router.get("getById/:id",verifyToken, getLeaderById);
 
 // Admin only: Create leader
-router.post("/", verifyToken, createLeader);
+router.post("/", verifyToken, isAdmin, createLeader);
+router.put("/:id", verifyToken, isAdmin, updateLeader);
+
 
 export default router;
