@@ -137,3 +137,24 @@ export const getGlobalLeaderPerformance = async (req, res) => {
     res.status(500).json({ message: "Failed to calculate leader performance", error: err.message });
   }
 };
+
+// Delete leader (admin only)
+export const deleteLeader = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const leader = await Leader.findById(id);
+    if (!leader) {
+      return res.status(404).json({ message: "Leader not found" });
+    }
+
+    await Leader.findByIdAndDelete(id);
+
+    // Optionally, delete related reviews
+    await Review.deleteMany({ leaderId: id });
+
+    res.status(200).json({ message: "Leader deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete leader", error: err.message });
+  }
+};
