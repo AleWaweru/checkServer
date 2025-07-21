@@ -11,7 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   "https://checks-qtvn.onrender.com",
-  "http://localhost:5173"           
+  "http://localhost:5173",
+  "https://checkserver-xm2t.onrender.com"          
 ];
 
 app.use(
