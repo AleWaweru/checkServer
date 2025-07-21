@@ -7,6 +7,7 @@ import leaderRoutes from "./routes/leaderRoutes.js";
 import reviewsRoutes from "./routes/reviewRoute.js";
 
 dotenv.config();
+console.log("✅ EMAIL_USER:", process.env.EMAIL_USER); 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
