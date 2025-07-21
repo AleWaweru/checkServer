@@ -17,7 +17,7 @@ export const sendVerificationEmail = async (user, token) => {
   const url = `${process.env.BASE_URL}/api/auth/verify-email?token=${token}`;
 
   const mailOptions = {
-    from: `"Gemstone Technoglobal" <${process.env.EMAIL_USER}>`,
+    from: `"Darubini" <${process.env.EMAIL_USER}>`,
     to: user.email,
     subject: "Verify your email address",
     html: `
@@ -28,5 +28,11 @@ export const sendVerificationEmail = async (user, token) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully:", info.response);
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
 };
+
