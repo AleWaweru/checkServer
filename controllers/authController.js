@@ -189,7 +189,7 @@ export const forgotPasswordRequestController = async (req, res, next) => {
     user.resetPasswordExpires = Date.now() + 3600000; // Token valid for 1 hour
 
     await user.save();
-    const link = `http://localhost:5173/reset-password?token=${resetToken}/${user._id}`;
+    const link = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}/${user._id}`;
 
     return res.status(200).json({ message: "Password reset link generated", link });
   } catch (error) {
